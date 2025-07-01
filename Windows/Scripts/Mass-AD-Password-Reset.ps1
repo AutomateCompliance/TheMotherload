@@ -15,7 +15,8 @@ $NewPassword=[Web.Security.Membership]::GeneratePassword(8,1)
 Set-ADAccountPassword -Identity $Name -Reset -NewPassword (ConvertTo-SecureString -AsPlainText $NewPassword -Force)
 Get-ADUser -Identity $Name |Set-ADUser -ChangePasswordAtLogon:$true
 
-Write-Output "UserID:$name `t Password:$NewPassword" `n`n|FT -AutoSize| sort-object UserID >> $filepath\NewPass$date.txt
+# Append the username and generated password to the output file
+Add-Content -Path "$filepath\NewPass$date.txt" -Value "UserID:$Name`tPassword:$NewPassword"
 }
 
 Read-Host "File NewPass$date.txt with the user list and their new passwords has been saved to your desktop. Please press any key to exit..."
